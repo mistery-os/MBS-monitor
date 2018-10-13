@@ -3,7 +3,9 @@
 #include <linux/kernel.h>
 #include <linux/kthread.h>
 #include <linux/delay.h>
-
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
+#include <linux/sched/signal.h>
+#endif
 static struct task_struct *thread_st;
 static int thread_fn(void *unused)
 {
@@ -37,7 +39,7 @@ static int __init mntr_init(void)
 
 static void __exit mntr_exit(void)
 {
-	if (threat_st)
+	if (thread_st)
 	{
 		kthread_stop(thread_st);
 		printk(KERN_INFO "Thread stopped\n");
