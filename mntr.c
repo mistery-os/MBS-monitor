@@ -20,11 +20,12 @@ static int thread_fn(void *unused)
 static int __init mntr_init(void)
 {
 	printk(KERN_INFO "Creating Thread\n");
-	thread_st = kthread_create(thread_fn, NULL, "MBSmonitor");
+	//thread_st = kthread_create(thread_fn, NULL, "MBSmonitor");
+	thread_st = kthread_run(thread_fn, NULL, "MBSmonitor");
 	if (thread_st)
 	{
 		printk("Thread created successfully\n");
-		wake_up_process(thread_st);
+		//wake_up_process(thread_st);
 	}
 	else
 		printk(KERN_INFO "Thread creation failed\n");
@@ -33,6 +34,11 @@ static int __init mntr_init(void)
 
 static void __exit mntr_exit(void)
 {
+	if (threat_st)
+	{
+		kthread_stop(thread_st);
+		printk(KERN_INFO "Thread stopped\n");
+	}
 	printk("Cleaning Up\n");
 }
 
