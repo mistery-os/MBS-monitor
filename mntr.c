@@ -7,10 +7,13 @@
 static struct task_struct *thread_st;
 static int thread_fn(void *unused)
 {
-	while(1)
+	allow_signal(SIGKILL);
+	while(!kthread_should_stop())
 	{
 		printk(KERN_INFO "Thread Running\n");
 		ssleep(5);
+		if (signal_pending(thread_st))
+			break;
 	}
 	printk(KERN_INFO "Thread Stopping\n");
 	do_exit(0);
