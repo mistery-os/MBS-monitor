@@ -2,6 +2,7 @@
 #include <linux/version.h>
 #include <linux/kernel.h>
 #include <linux/kthread.h>
+#include <linux/delay.h>
 
 static struct task_struct *thread_st;
 static int thread_fn(void *unused)
@@ -9,7 +10,7 @@ static int thread_fn(void *unused)
 	while(1)
 	{
 		printk(KERN_INFO "Thread Running\n");
-		sleep(5);
+		ssleep(5);
 	}
 	printk(KERN_INFO "Thread Stopping\n");
 	do_exit(0);
@@ -21,7 +22,10 @@ static int __init mntr_init(void)
 	printk(KERN_INFO "Creating Thread\n");
 	thread_st = kthread_create(thread_fn, NULL, "MBSmonitor");
 	if (thread_st)
+	{
 		printk("Thread created successfully\n");
+		wake_up_process(thread_st);
+	}
 	else
 		printk(KERN_INFO "Thread creation failed\n");
 	return 0;
