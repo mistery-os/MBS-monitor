@@ -4,6 +4,7 @@
 #include <linux/kthread.h>
 #include <linux/delay.h>
 #include <linux/swap.h>
+#include <linux/cpuset.h>
 //https://github.com/diederikdehaas/rtl8812AU/issues/75
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
 #include <linux/sched/signal.h>
