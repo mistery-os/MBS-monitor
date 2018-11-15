@@ -100,6 +100,7 @@ static int mbs_mntrd_cpu_online(unsigned int cpu)
 void mbs_mntrd_stop(int nid)
 {
 	struct task_struct *mbs_mntrd = NODE_DATA(nid)->mbs_mntrd;
+	int err;
 
 	if (mbs_mntrd) {
 		err = kthread_stop(mbs_mntrd);
@@ -125,6 +126,8 @@ static int __init mbs_mntrd_init(void)
 
 static void __exit mbs_mntrd_exit(void)
 {
+	int nid;
+	
 	for_each_node_state(nid, N_MEMORY)
 		mbs_mntrd_stop(nid);
 	printk("Cleaning Up\n");
@@ -134,5 +137,5 @@ module_init(mbs_mntrd_init);
 module_exit(mbs_mntrd_exit);
 
 MODULE_LICENSE("GPL");
-MODULE_AUTHOR("Yongseob LEE");
+MODULE_AUTHOR("Yongseob LEE<Yongseob.Rhee@gmail.com>");
 MODULE_DESCRIPTION("MBS Monitor");
