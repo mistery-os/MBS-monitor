@@ -14,7 +14,7 @@
 DEFINE_MUTEX(mbs_mntr_mutex);
 //struct mutex mbs_mntr_mutex;
 //mutex_init(&mbs_mntr_mutex);
-extern int mbs_mntrd(void *p);
+extern int mbs_mntrd_run(int);
 /*
  * The background MBS monitoring daemon, started as a kernel thread
  * from module_init.
@@ -57,24 +57,6 @@ void mbs_mntrd_stop(int nid)
 		if (err!=-EINTR)
 			printk(KERN_INFO "mbs monitor stopped of node : %d\n",nid);
 	}
-}
-
-static int mbs_mntrd_run(int nid)
-{
-	pg_data_t *pgdat = NODE_DATA(nid);
-	int ret = 0;
-
-	if (pgdat->mbs_mntrd)
-		return 0;
-
-	pgdat->mbs_mntrd = kthread_run(mbs_mntrd, pgdat, "mbs_mntrd%d", nid);
-	if (IS_ERR(pgdat->mbs_mntrd)) {
-		//BUG_ON(system_state < SYSTEM_RUNNING);
-		pr_err("Failed to start mbs_mntr on node %d\n", nid);
-		ret = PTR_ERR(pgdat->mbs_mntrd);
-		pgdat->mbs_mntrd = NULL;
-	}
-	return ret;
 }
 
 static int __init mbs_mntrd_init(void)
