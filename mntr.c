@@ -10,11 +10,11 @@
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
 #include <linux/sched/signal.h>
 #endif
-static struct task_struct *mntr_task;
+//static struct task_struct *mntr_task;
 DEFINE_MUTEX(mbs_mntr_mutex);
 //struct mutex mbs_mntr_mutex;
 //mutex_init(&mbs_mntr_mutex);
-extern static int mbs_mntrd(void *p);
+extern int mbs_mntrd(void *p);
 /*
  * The background MBS monitoring daemon, started as a kernel thread
  * from module_init.
